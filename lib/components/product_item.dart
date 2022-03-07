@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_shop/models/product.dart';
 import 'package:udemy_shop/pages/product_detail_page.dart';
+import 'package:udemy_shop/utils/app_routes.dart';
 
 class ProductItem extends StatelessWidget {
   final Product product;
@@ -13,9 +14,9 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (ctx) => ProductDetailPage(product: product)),
+            Navigator.of(context).pushNamed(
+              AppRoutes.PRODUCT_DETAIL,
+              arguments: product,
             );
           },
           child: Image.network(
