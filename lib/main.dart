@@ -14,18 +14,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData tema = ThemeData(fontFamily: 'Lato');
     return ChangeNotifierProvider(
       create: (_) => ProductList(),
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch().copyWith(
+        theme: tema.copyWith(
+          colorScheme: tema.colorScheme.copyWith(
             primary: Colors.deepPurple,
             secondary: Colors.deepOrange,
             onPrimary: Colors.amber,
             onSecondary: Colors.green,
           ),
-          fontFamily: 'Lato',
         ),
         home: ProductsOverviewPage(),
         routes: {AppRoutes.PRODUCT_DETAIL: (ctx) => ProductDetailPage()},
