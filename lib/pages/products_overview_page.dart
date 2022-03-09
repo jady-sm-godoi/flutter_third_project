@@ -8,13 +8,18 @@ enum FilterOptions {
   All,
 }
 
-class ProductsOverviewPage extends StatelessWidget {
+class ProductsOverviewPage extends StatefulWidget {
   ProductsOverviewPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<ProductList>(context);
+  State<ProductsOverviewPage> createState() => _ProductsOverviewPageState();
+}
 
+class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
+  bool _showFavorityOnly = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -24,27 +29,33 @@ class ProductsOverviewPage extends StatelessWidget {
         centerTitle: true,
         actions: [
           PopupMenuButton(
-            icon: const Icon(Icons.menu),
-            itemBuilder: (_) => const [
-              PopupMenuItem(
-                child: Text('apenas os favoritos'),
-                value: FilterOptions.Favorite,
-              ),
-              PopupMenuItem(
-                child: Text('todos os produtos'),
-                value: FilterOptions.All,
-              )
-            ],
-            onSelected: (FilterOptions value) => {
-              if (value == FilterOptions.Favorite)
-                {provider.showFavorite()}
-              else
-                {provider.showAll()}
-            },
-          )
+              icon: const Icon(Icons.menu),
+              itemBuilder: (_) => const [
+                    PopupMenuItem(
+                      child: Text('apenas os favoritos'),
+                      value: FilterOptions.Favorite,
+                    ),
+                    PopupMenuItem(
+                      child: Text('todos os produtos'),
+                      value: FilterOptions.All,
+                    )
+                  ],
+              onSelected: (FilterOptions value) {
+                setState(() {
+                  {
+                    if (value == FilterOptions.Favorite) {
+                      _showFavorityOnly = true;
+                    } else {
+                      _showFavorityOnly = false;
+                    }
+                  }
+                });
+              })
         ],
       ),
-      body: const ProductGrid(),
+      body: ProductGrid(
+        showFavoriteOnly: _showFavorityOnly,
+      ),
     );
   }
 }

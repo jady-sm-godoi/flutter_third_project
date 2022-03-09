@@ -7,20 +7,11 @@ class ProductList with ChangeNotifier {
   bool _showFavorite = false;
 
   List<Product> get items {
-    if (_showFavorite) {
-      return _items.where((product) => product.isFavorite).toList();
-    }
     return [..._items];
   }
 
-  void showFavorite() {
-    _showFavorite = true;
-    notifyListeners();
-  }
-
-  void showAll() {
-    _showFavorite = false;
-    notifyListeners();
+  List<Product> get favoriteItems {
+    return _items.where((product) => product.isFavorite).toList();
   }
 
   void addProduct(Product product) {
