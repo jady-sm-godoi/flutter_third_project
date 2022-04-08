@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_shop/components/cart_item_card.dart';
 import 'package:udemy_shop/models/cart.dart';
+import 'package:udemy_shop/models/order_list.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -48,7 +49,13 @@ class CartPage extends StatelessWidget {
                       textStyle: TextStyle(
                           color: Theme.of(context).colorScheme.primary),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<OrderList>(
+                        context,
+                        listen: false,
+                      ).addOrder(cart);
+                      cart.clear();
+                    },
                     child: const Text('COMPRAR'),
                   )
                 ],
