@@ -4,8 +4,8 @@ import 'package:udemy_shop/models/cart.dart';
 import 'package:udemy_shop/models/product.dart';
 import 'package:udemy_shop/utils/app_routes.dart';
 
-class ProductItem extends StatelessWidget {
-  const ProductItem({Key? key}) : super(key: key);
+class ProductGridItem extends StatelessWidget {
+  const ProductGridItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +45,24 @@ class ProductItem extends StatelessWidget {
             ),
           ),
           trailing: IconButton(
-            onPressed: () {
-              cart.addItem(product);
-              print(cart.itemsCount);
-            },
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,
+            onPressed: () {
+              cart.addItem(product);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: const Text('Produto adicionado com sucesso!'),
+                duration: const Duration(seconds: 2),
+                backgroundColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                action: SnackBarAction(
+                  label: 'CANCELAR',
+                  textColor: Colors.black,
+                  onPressed: () {
+                    cart.removeSingleItem(product.id);
+                  },
+                ),
+              ));
+            },
           ),
         ),
       ),

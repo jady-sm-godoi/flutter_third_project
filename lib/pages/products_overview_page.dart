@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:udemy_shop/components/app_drawer.dart';
 import 'package:udemy_shop/components/badge.dart';
 import 'package:udemy_shop/models/cart.dart';
 import 'package:udemy_shop/models/product_list.dart';
@@ -32,7 +33,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
         centerTitle: true,
         actions: [
           PopupMenuButton(
-            icon: const Icon(Icons.menu),
+            icon: const Icon(Icons.more_vert),
             itemBuilder: (_) => const [
               PopupMenuItem(
                 child: Text('apenas os favoritos'),
@@ -72,6 +73,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
       body: ProductGrid(
         showFavoriteOnly: _showFavorityOnly,
       ),
+      drawer: const AppDrawer(),
     );
   }
 }

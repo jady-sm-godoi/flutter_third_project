@@ -4,6 +4,7 @@ import 'package:udemy_shop/models/cart.dart';
 import 'package:udemy_shop/models/order_list.dart';
 import 'package:udemy_shop/models/product_list.dart';
 import 'package:udemy_shop/pages/cart_page.dart';
+import 'package:udemy_shop/pages/orders_page.dart';
 import 'package:udemy_shop/pages/product_detail_page.dart';
 import 'package:udemy_shop/pages/products_overview_page.dart';
 import 'package:udemy_shop/utils/app_routes.dart';
@@ -42,10 +43,12 @@ class MyApp extends StatelessWidget {
             onSecondary: Colors.green,
           ),
         ),
-        home: ProductsOverviewPage(),
+        // home: ProductsOverviewPage(),
         routes: {
-          AppRoutes.PRODUCT_DETAIL: (ctx) => ProductDetailPage(),
-          AppRoutes.CART: (ctx) => CartPage(),
+          AppRoutes.HOME: (ctx) => ProductsOverviewPage(),
+          AppRoutes.PRODUCT_DETAIL: (ctx) => const ProductDetailPage(),
+          AppRoutes.CART: (ctx) => const CartPage(),
+          AppRoutes.ORDERS: (ctx) => const OrdersPage(),
         },
         debugShowCheckedModeBanner: false,
       ),
