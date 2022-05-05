@@ -49,9 +49,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
       imageUrl: _formData['imageUrl'].toString(),
     );
 
-    print(newProduct.id);
-    print(newProduct.name);
-    print(newProduct.description);
+    // print(newProduct.id);
+    // print(newProduct.name);
+    // print(newProduct.description);
   }
 
   @override

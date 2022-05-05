@@ -3,8 +3,8 @@ import 'package:udemy_shop/data/dummy_data.dart';
 import 'package:udemy_shop/models/product.dart';
 
 class ProductList with ChangeNotifier {
-  List<Product> _items = dummyProducts;
-  bool _showFavorite = false;
+  final List<Product> _items = dummyProducts;
+  // final bool _showFavorite = false;
 
   List<Product> get items {
     return [..._items];

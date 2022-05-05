@@ -29,8 +29,9 @@ class _OrderCardState extends State<OrderCard> {
                   _expanded = !_expanded;
                 });
               },
-              icon:
-                  _expanded ? Icon(Icons.expand_less) : Icon(Icons.expand_more),
+              icon: _expanded
+                  ? const Icon(Icons.expand_less)
+                  : const Icon(Icons.expand_more),
             ),
           ),
           if (_expanded)
@@ -54,7 +55,7 @@ class _OrderCardState extends State<OrderCard> {
                       ),
                       Text(
                         '${product.quantity} X R\$ ${product.price}',
-                        style: TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: Colors.grey),
                       ),
                     ],
                   );

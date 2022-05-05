@@ -15,7 +15,7 @@ class ProductDetailPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               child: Image.network(
                 product.imageUrl,
                 fit: BoxFit.cover,
@@ -26,14 +26,14 @@ class ProductDetailPage extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'R\$ ${product.price}',
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               color: Theme.of(context).colorScheme.primaryVariant,
               width: double.infinity,
               child: Padding(

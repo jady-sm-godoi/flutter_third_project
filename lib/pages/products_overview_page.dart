@@ -3,17 +3,16 @@ import 'package:provider/provider.dart';
 import 'package:udemy_shop/components/app_drawer.dart';
 import 'package:udemy_shop/components/badge.dart';
 import 'package:udemy_shop/models/cart.dart';
-import 'package:udemy_shop/models/product_list.dart';
 import 'package:udemy_shop/utils/app_routes.dart';
 import '../components/product_grid.dart';
 
 enum FilterOptions {
-  Favorite,
-  All,
+  favorite,
+  all,
 }
 
 class ProductsOverviewPage extends StatefulWidget {
-  ProductsOverviewPage({Key? key}) : super(key: key);
+  const ProductsOverviewPage({Key? key}) : super(key: key);
 
   @override
   State<ProductsOverviewPage> createState() => _ProductsOverviewPageState();
@@ -37,17 +36,17 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
             itemBuilder: (_) => const [
               PopupMenuItem(
                 child: Text('apenas os favoritos'),
-                value: FilterOptions.Favorite,
+                value: FilterOptions.favorite,
               ),
               PopupMenuItem(
                 child: Text('todos os produtos'),
-                value: FilterOptions.All,
+                value: FilterOptions.all,
               )
             ],
             onSelected: (FilterOptions value) {
               setState(() {
                 {
-                  if (value == FilterOptions.Favorite) {
+                  if (value == FilterOptions.favorite) {
                     _showFavorityOnly = true;
                   } else {
                     _showFavorityOnly = false;
