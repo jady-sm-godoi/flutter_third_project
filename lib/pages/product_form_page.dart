@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:udemy_shop/models/product.dart';
+import 'package:provider/provider.dart';
+import 'package:udemy_shop/models/product_list.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({Key? key}) : super(key: key);
@@ -39,19 +38,37 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setState(() {});
   }
 
-  void submitForm() {
-    _formKey.currentState?.save();
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      name: _formData['name'].toString(),
-      description: _formData['description'].toString(),
-      price: _formData['price'] as double,
-      imageUrl: _formData['imageUrl'].toString(),
-    );
+  bool validatorUrlImage(String url) {
+    bool _isValidUrl = Uri.tryParse(url)?.hasAbsolutePath ?? false;
 
-    // print(newProduct.id);
-    // print(newProduct.name);
-    // print(newProduct.description);
+    final _url = url.toLowerCase();
+    bool _endsWithFile =
+        _url.endsWith('png') || _url.endsWith('jpg') || _url.endsWith('jpeg');
+
+    return _isValidUrl && _endsWithFile;
+  }
+
+  bool validatorTextInput(String text, int tamanho) {
+    bool _isNotEmpty = text.trim().isNotEmpty;
+    bool _hasGoodLenght = text.trim().length >= tamanho;
+
+    return _isNotEmpty && _hasGoodLenght;
+  }
+
+  void submitForm() {
+    final _isValid = _formKey.currentState?.validate() ?? false;
+
+    if (!_isValid) {
+      return;
+    }
+
+    _formKey.currentState?.save();
+
+    Provider.of<ProductList>(
+      context,
+      listen: false,
+    ).addProductFromData(_formData);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -80,6 +97,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     FocusScope.of(context).requestFocus(_priceFocus);
                   },
                   onSaved: (name) => _formData['name'] = name ?? '',
+                  validator: (name) {
+                    final _name = name ?? '';
+
+                    if (!validatorTextInput(_name, 2)) {
+                      return 'Insira uma nome válido!';
+                    }
+
+                    return null;
+                  },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'preço'),
@@ -92,6 +118,14 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       const TextInputType.numberWithOptions(decimal: true),
                   onSaved: (price) =>
                       _formData['price'] = double.parse(price ?? '0'),
+                  validator: (price) {
+                    final _price = double.tryParse(price ?? '') ?? -1;
+
+                    if (_price <= 0) {
+                      return 'Informe um preço válido';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'descrição'),
@@ -100,6 +134,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   maxLines: 3,
                   onSaved: (description) =>
                       _formData['description'] = description ?? '',
+                  validator: (description) {
+                    final _description = description ?? '';
+
+                    if (!validatorTextInput(_description, 10)) {
+                      return 'Insira uma descrição válida. Mínimo 10 caracteres!';
+                    }
+
+                    return null;
+                  },
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -115,6 +158,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         onFieldSubmitted: (_) => submitForm(),
                         onSaved: (imageUrl) =>
                             _formData['imageUrl'] = imageUrl ?? '',
+                        validator: (image) {
+                          final _image = image ?? '';
+
+                          if (!validatorUrlImage(_image)) {
+                            return 'Insira uma url válida!';
+                          }
+
+                          return null;
+                        },
                       ),
                     ),
                     Container(
