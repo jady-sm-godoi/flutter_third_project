@@ -198,9 +198,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       alignment: Alignment.center,
                       child: _imageUrlController.text.isEmpty
                           ? const Text('Url?')
-                          : FittedBox(
-                              fit: BoxFit.cover,
-                              child: Image.network(_imageUrlController.text),
+                          : SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: Image.network(_imageUrlController.text),
+                              ),
                             ),
                       decoration: BoxDecoration(
                         border: Border.all(

@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:math';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/widgets.dart';
 import 'package:udemy_shop/data/dummy_data.dart';
 import 'package:udemy_shop/models/product.dart';
 
 class ProductList with ChangeNotifier {
+  final _baseUrl = 'https://shop-udemy-8ce2d-default-rtdb.firebaseio.com';
   final List<Product> _items = dummyProducts;
   // final bool _showFavorite = false;
 
@@ -21,6 +24,14 @@ class ProductList with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    http.post(Uri.parse('$_baseUrl/products.json'),
+        body: jsonEncode({
+          'name': product.name,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+          'isFavorite': product.isFavorite,
+        }));
     _items.add(product);
     notifyListeners();
   }
@@ -30,6 +41,15 @@ class ProductList with ChangeNotifier {
 
     if (index >= 0) {
       _items[index] = product;
+      notifyListeners();
+    }
+  }
+
+  void removeProduct(Product product) {
+    int index = _items.indexWhere((p) => p.id == product.id);
+
+    if (index >= 0) {
+      _items.removeWhere((p) => p.id == product.id);
       notifyListeners();
     }
   }
