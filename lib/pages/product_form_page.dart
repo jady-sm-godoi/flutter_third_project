@@ -49,7 +49,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     super.dispose();
     _priceFocus.dispose();
     _descriptionFocus.dispose();
-    _imageUrlFocus.dispose();
+    // _imageUrlFocus.dispose();
     _imageUrlFocus.removeListener(updateImage);
   }
 
@@ -198,14 +198,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       alignment: Alignment.center,
                       child: _imageUrlController.text.isEmpty
                           ? const Text('Url?')
-                          : SizedBox(
-                              width: 100,
-                              height: 100,
-                              child: FittedBox(
-                                fit: BoxFit.cover,
-                                child: Image.network(_imageUrlController.text),
-                              ),
-                            ),
+                          : Image.network(_imageUrlController.text),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.grey,
