@@ -76,7 +76,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     return _isNotEmpty && _hasGoodLenght;
   }
 
-  void submitForm() {
+  void submitForm() async {
     final _isValid = _formKey.currentState?.validate() ?? false;
 
     if (!_isValid) {
@@ -89,28 +89,29 @@ class _ProductFormPageState extends State<ProductFormPage> {
       _isLoading = true;
     });
 
-    Provider.of<ProductList>(
-      context,
-      listen: false,
-    )
-        .saveProductFromData(_formData)
-        .catchError((onError) => showDialog(
-            context: context,
-            builder: (ctx) => AlertDialog(
-                  title: const Text('Ops! Ocorreu um erro.'),
-                  content: const Text('Não consegui salvar seu produto!'),
-                  actions: [
-                    TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('OK'))
-                  ],
-                )))
-        .then((value) {
+    try {
+      await Provider.of<ProductList>(
+        context,
+        listen: false,
+      ).saveProductFromData(_formData);
+      Navigator.of(context).pop();
+    } catch (erro) {
+      await showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text('Ops! Ocorreu um erro.'),
+                content: const Text('Não consegui salvar seu produto!'),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('OK'))
+                ],
+              ));
+    } finally {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop();
-    });
+    }
   }
 
   @override
