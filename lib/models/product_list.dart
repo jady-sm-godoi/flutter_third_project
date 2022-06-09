@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/widgets.dart';
-import 'package:udemy_shop/data/dummy_data.dart';
 import 'package:udemy_shop/models/product.dart';
 
 class ProductList with ChangeNotifier {
-  final _baseUrl = 'https://shop-udemy-8ce2d-default-rtdb.firebaseio.com';
-  final List<Product> _items = dummyProducts;
+  final _url =
+      'https://shop-udemy-8ce2d-default-rtdb.firebaseio.com/products.json';
+  final List<Product> _items = [];
   // final bool _showFavorite = false;
 
   List<Product> get items {
@@ -23,9 +23,31 @@ class ProductList with ChangeNotifier {
     return _items.length;
   }
 
+  Future<void> loadProducts() async {
+    _items.clear();
+    final response = await http.get(
+      Uri.parse(_url),
+    );
+    if (response.body == 'null') {
+      return;
+    }
+    Map<String, dynamic> data = jsonDecode(response.body);
+    data.forEach((productId, productData) {
+      _items.add(Product(
+        id: productId,
+        name: productData['name'],
+        price: productData['price'],
+        description: productData['description'],
+        imageUrl: productData['imageUrl'],
+        isFavorite: productData['isFavorite'],
+      ));
+    });
+    notifyListeners();
+  }
+
   Future<void> addProduct(Product product) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/products.json'),
+      Uri.parse(_url),
       body: jsonEncode({
         'name': product.name,
         'description': product.description,

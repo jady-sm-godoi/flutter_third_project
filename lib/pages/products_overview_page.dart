@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:udemy_shop/components/app_drawer.dart';
 import 'package:udemy_shop/components/badge.dart';
 import 'package:udemy_shop/models/cart.dart';
+import 'package:udemy_shop/models/product_list.dart';
 import 'package:udemy_shop/utils/app_routes.dart';
 import '../components/product_grid.dart';
 
@@ -20,6 +21,20 @@ class ProductsOverviewPage extends StatefulWidget {
 
 class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
   bool _showFavorityOnly = false;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProductList>(
+      context,
+      listen: false,
+    ).loadProducts().then((value) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +84,13 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
           )
         ],
       ),
-      body: ProductGrid(
-        showFavoriteOnly: _showFavorityOnly,
-      ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductGrid(
+              showFavoriteOnly: _showFavorityOnly,
+            ),
       drawer: const AppDrawer(),
     );
   }
