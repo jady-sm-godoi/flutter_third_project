@@ -75,13 +75,12 @@ class ProductList with ChangeNotifier {
 
     if (index >= 0) {
       await http.patch(
-        Uri.parse('$_baseUrl.json'),
+        Uri.parse('$_baseUrl/${product.id}.json'),
         body: jsonEncode({
           'name': product.name,
           'description': product.description,
           'price': product.price,
           'imageUrl': product.imageUrl,
-          'isFavorite': product.isFavorite,
         }),
       );
       _items[index] = product;
