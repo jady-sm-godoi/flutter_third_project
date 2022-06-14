@@ -25,17 +25,23 @@ class ProductsPage extends StatelessWidget {
         ],
       ),
       drawer: const AppDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: products.itemsCount,
-          itemBuilder: (context, i) => Column(
-            children: [
-              ProductItem(
-                product: products.items[i],
-              ),
-              const Divider(),
-            ],
+      body: RefreshIndicator(
+        onRefresh: () => Provider.of<ProductList>(
+          context,
+          listen: false,
+        ).refreshProducts(context),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListView.builder(
+            itemCount: products.itemsCount,
+            itemBuilder: (context, i) => Column(
+              children: [
+                ProductItem(
+                  product: products.items[i],
+                ),
+                const Divider(),
+              ],
+            ),
           ),
         ),
       ),

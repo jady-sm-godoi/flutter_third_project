@@ -84,13 +84,19 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
           )
         ],
       ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ProductGrid(
-              showFavoriteOnly: _showFavorityOnly,
-            ),
+      body: RefreshIndicator(
+        onRefresh: () => Provider.of<ProductList>(
+          context,
+          listen: false,
+        ).refreshProducts(context),
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ProductGrid(
+                showFavoriteOnly: _showFavorityOnly,
+              ),
+      ),
       drawer: const AppDrawer(),
     );
   }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:udemy_shop/exceptions/http_exception.dart';
 import 'package:udemy_shop/models/product.dart';
 
@@ -127,5 +128,12 @@ class ProductList with ChangeNotifier {
     } else {
       return addProduct(product);
     }
+  }
+
+  Future<void> refreshProducts(BuildContext context) {
+    return Provider.of<ProductList>(
+      context,
+      listen: false,
+    ).loadProducts();
   }
 }
