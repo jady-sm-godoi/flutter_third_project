@@ -6,12 +6,10 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_shop/exceptions/http_exception.dart';
 import 'package:udemy_shop/models/product.dart';
+import 'package:udemy_shop/utils/constants.dart';
 
 class ProductList with ChangeNotifier {
-  final _baseUrl =
-      'https://shop-udemy-8ce2d-default-rtdb.firebaseio.com/products';
   final List<Product> _items = [];
-  // final bool _showFavorite = false;
 
   List<Product> get items {
     return [..._items];
@@ -28,7 +26,7 @@ class ProductList with ChangeNotifier {
   Future<void> loadProducts() async {
     _items.clear();
     final response = await http.get(
-      Uri.parse('$_baseUrl.json'),
+      Uri.parse('${Constants.PRODUCT_BASE_URL}.json'),
     );
     if (response.body == 'null') {
       return;
@@ -49,7 +47,7 @@ class ProductList with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl.json'),
+      Uri.parse('${Constants.PRODUCT_BASE_URL}.json'),
       body: jsonEncode({
         'name': product.name,
         'description': product.description,
@@ -77,7 +75,7 @@ class ProductList with ChangeNotifier {
 
     if (index >= 0) {
       await http.patch(
-        Uri.parse('$_baseUrl/${product.id}.json'),
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
         body: jsonEncode({
           'name': product.name,
           'description': product.description,
@@ -99,9 +97,8 @@ class ProductList with ChangeNotifier {
       notifyListeners();
 
       final response = await http.delete(
-        Uri.parse('$_baseUrl/${product.id}.json'),
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
       );
-
       if (response.statusCode >= 400) {
         _items.insert(index, product);
         notifyListeners();
