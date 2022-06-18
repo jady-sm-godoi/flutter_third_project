@@ -40,9 +40,10 @@ class Product with ChangeNotifier {
 
     if (response.statusCode >= 400) {
       _toggleFavorite();
-      //   throw HttpException(
-      //       msg: 'Não foi possível excluir o produto.',
-      //       statusCode: response.statusCode);
+      notifyListeners();
+      throw HttpException(
+          msg: 'Não foi possível alterar o status do produto.',
+          statusCode: response.statusCode);
     }
   }
 }

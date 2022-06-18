@@ -35,8 +35,22 @@ class ProductGridItem extends StatelessWidget {
           ),
           leading: Consumer<Product>(
             builder: (ctx, product, _) => IconButton(
-              onPressed: () {
-                product.toggleFavorite();
+              onPressed: () async {
+                try {
+                  await product.toggleFavorite();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: product.isFavorite
+                        ? const Text('Produto favoritado!')
+                        : const Text('Produto desfavoritado!'),
+                    duration: const Duration(seconds: 2),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                  ));
+                } catch (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(error.toString())),
+                  );
+                }
               },
               icon: Icon(
                 product.isFavorite ? Icons.favorite : Icons.favorite_border,
