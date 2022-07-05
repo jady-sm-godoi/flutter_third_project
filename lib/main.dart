@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         theme: tema.copyWith(
           colorScheme: tema.colorScheme.copyWith(
             primary: Colors.deepPurple,
-            primaryVariant: Colors.deepPurple[100],
+            tertiary: Colors.deepPurple[100],
             secondary: Colors.deepOrange,
             onPrimary: Colors.amber,
             onSecondary: Colors.green,

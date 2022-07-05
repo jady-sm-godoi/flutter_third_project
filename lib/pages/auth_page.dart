@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:udemy_shop/components/auth_form.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class AuthPage extends StatelessWidget {
                   vertical: 10,
                   horizontal: 70,
                 ),
-                transform: Matrix4.rotationZ(-5 * pi / 180),
+                transform: Matrix4.rotationZ(-5 * pi / 180)..translate(-10.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     color: Colors.deepOrange.shade600,
@@ -47,9 +48,10 @@ class AuthPage extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 48,
                       fontFamily: 'Anton',
-                      color: Theme.of(context).colorScheme.primaryVariant),
+                      color: Theme.of(context).colorScheme.tertiary),
                 ),
-              )
+              ),
+              const AuthForm(),
             ],
           ),
         )
