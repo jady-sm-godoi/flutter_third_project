@@ -22,13 +22,14 @@ class AuthPage extends StatelessWidget {
             end: Alignment.bottomRight,
           )),
         ),
-        Container(
+        SizedBox(
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
+                margin: const EdgeInsets.only(bottom: 30),
                 padding: const EdgeInsets.symmetric(
                   vertical: 10,
                   horizontal: 70,
