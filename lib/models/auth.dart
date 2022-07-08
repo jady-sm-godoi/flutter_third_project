@@ -5,6 +5,28 @@ import 'package:http/http.dart' as http;
 import 'package:udemy_shop/exceptions/auth_exception.dart';
 
 class Auth with ChangeNotifier {
+  String? _token;
+  String? _email;
+  String? _uid;
+  DateTime? _expireDate;
+
+  bool get isAuth {
+    final _isValidTime = _expireDate?.isAfter(DateTime.now()) ?? false;
+    return _token != null && _isValidTime;
+  }
+
+  String? get token {
+    return isAuth ? _token : null;
+  }
+
+  String? get email {
+    return isAuth ? _email : null;
+  }
+
+  String? get uid {
+    return isAuth ? _uid : null;
+  }
+
   Future<void> _authentication(
       String email, String password, String urlFragment) async {
     final url =
@@ -25,9 +47,17 @@ class Auth with ChangeNotifier {
 
     if (body['error'] != null) {
       throw authException(body['error']['message']);
+    } else {
+      _token = body['idToken'];
+      _email = body['email'];
+      _uid = body['localId'];
+      _expireDate = DateTime.now().add(
+        Duration(
+          seconds: int.parse(body['expiresIn']),
+        ),
+      );
+      notifyListeners();
     }
-
-    print(body);
   }
 
   Future<void> signup(String email, String password) async {
