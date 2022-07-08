@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:udemy_shop/exceptions/auth_exception.dart';
+
+import '../models/auth.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -33,7 +37,23 @@ class _AuthFormState extends State<AuthForm> {
     });
   }
 
-  void _submit() {
+  void _showErrorDialog(String msg) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Ops! Um erro:'),
+        content: Text(msg),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('X'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _submit() async {
     final _isValid = _formKey.currentState?.validate() ?? false;
 
     if (!_isValid) {
@@ -43,11 +63,26 @@ class _AuthFormState extends State<AuthForm> {
     setState(() => _isLoading = true);
 
     _formKey.currentState?.save();
+    Auth auth = Provider.of(context, listen: false);
 
-    if (_isLogin()) {
-      //Login
-    } else {
-      //Cadastrar
+    try {
+      if (_isLogin()) {
+        //Login
+        await auth.login(
+          _authData['email']!,
+          _authData['password']!,
+        );
+      } else {
+        //Cadastrar
+        await auth.signup(
+          _authData['email']!,
+          _authData['password']!,
+        );
+      }
+    } on authException catch (error) {
+      _showErrorDialog(error.toString());
+    } catch (error) {
+      _showErrorDialog('Ops! Algo de errado não está certo!');
     }
 
     setState(() => _isLoading = false);

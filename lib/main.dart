@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:udemy_shop/models/auth.dart';
 import 'package:udemy_shop/models/cart.dart';
 import 'package:udemy_shop/models/order_list.dart';
 import 'package:udemy_shop/models/product_list.dart';
@@ -34,6 +35,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => OrderList(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => Auth(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -52,7 +56,7 @@ class MyApp extends StatelessWidget {
           AppRoutes.HOME: (ctx) => const ProductsOverviewPage(),
           AppRoutes.PRODUCT_DETAIL: (ctx) => const ProductDetailPage(),
           AppRoutes.CART: (ctx) => const CartPage(),
-          AppRoutes.ORDERS: (ctx) => OrdersPage(),
+          AppRoutes.ORDERS: (ctx) => const OrdersPage(),
           AppRoutes.PRODUCTS: (ctx) => const ProductsPage(),
           AppRoutes.PRODUCT_FORM: (ctx) => const ProductFormPage(),
         },
