@@ -34,7 +34,7 @@ class ProductDetailPage extends StatelessWidget {
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              color: Theme.of(context).colorScheme.primaryVariant,
+              color: Theme.of(context).colorScheme.primaryContainer,
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),

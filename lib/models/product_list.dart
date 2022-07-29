@@ -9,10 +9,15 @@ import 'package:udemy_shop/models/product.dart';
 import 'package:udemy_shop/utils/constants.dart';
 
 class ProductList with ChangeNotifier {
-  String _token;
-  List<Product> _items = [];
+  final String _token;
+  final List<Product> _items;
+  final String _userId;
 
-  ProductList(this._token, this._items);
+  ProductList([
+    this._userId = '',
+    this._token = '',
+    this._items = const [],
+  ]);
 
   List<Product> get items {
     return [..._items];
@@ -34,15 +39,25 @@ class ProductList with ChangeNotifier {
     if (response.body == 'null') {
       return;
     }
+
+    final favResponse = await http.get(
+      Uri.parse('${Constants.USER_FAVORITES_URL}/$_userId.json?auth=$_token'),
+    );
+
+    Map<String, dynamic> favData =
+        favResponse.body == 'null' ? {} : jsonDecode(favResponse.body);
+
     Map<String, dynamic> data = jsonDecode(response.body);
     data.forEach((productId, productData) {
+      final isFavorite = favData[productId] ?? false;
+
       _items.add(Product(
         id: productId,
         name: productData['name'],
         price: productData['price'],
         description: productData['description'],
         imageUrl: productData['imageUrl'],
-        isFavorite: productData['isFavorite'],
+        isFavorite: isFavorite,
       ));
     });
     notifyListeners();
@@ -56,7 +71,6 @@ class ProductList with ChangeNotifier {
         'description': product.description,
         'price': product.price,
         'imageUrl': product.imageUrl,
-        'isFavorite': product.isFavorite,
       }),
     );
 
@@ -68,7 +82,6 @@ class ProductList with ChangeNotifier {
       description: product.description,
       price: product.price,
       imageUrl: product.imageUrl,
-      isFavorite: product.isFavorite,
     ));
     notifyListeners();
   }

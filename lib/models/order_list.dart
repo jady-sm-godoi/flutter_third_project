@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,9 +11,12 @@ import 'package:udemy_shop/utils/constants.dart';
 
 class OrderList extends ChangeNotifier {
   List<Order> _items = [];
-  String _token;
+  final String _token;
 
-  OrderList(this._token, this._items);
+  OrderList([
+    this._token = '',
+    this._items = const [],
+  ]);
 
   List<Order> get items {
     return [..._items];

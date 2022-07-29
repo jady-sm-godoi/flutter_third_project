@@ -1,3 +1,4 @@
+// ignore: camel_case_types
 class authException implements Exception {
   static const Map<String, String> errors = {
     'EMAIL_EXISTS':

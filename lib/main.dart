@@ -5,12 +5,10 @@ import 'package:udemy_shop/models/cart.dart';
 import 'package:udemy_shop/models/order_list.dart';
 import 'package:udemy_shop/models/product_list.dart';
 import 'package:udemy_shop/pages/auth_or_home_page.dart';
-import 'package:udemy_shop/pages/auth_page.dart';
 import 'package:udemy_shop/pages/cart_page.dart';
 import 'package:udemy_shop/pages/orders_page.dart';
 import 'package:udemy_shop/pages/product_detail_page.dart';
 import 'package:udemy_shop/pages/product_form_page.dart';
-import 'package:udemy_shop/pages/products_overview_page.dart';
 import 'package:udemy_shop/pages/products_page.dart';
 import 'package:udemy_shop/utils/app_routes.dart';
 
@@ -31,14 +29,17 @@ class MyApp extends StatelessWidget {
           create: (_) => Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, ProductList>(
-          create: (_) => ProductList('', []),
+          create: (_) => ProductList(),
           update: (context, auth, previousProductList) {
             return ProductList(
-                auth.token ?? '', previousProductList?.items ?? []);
+              auth.userId ?? '',
+              auth.token ?? '',
+              previousProductList?.items ?? [],
+            );
           },
         ),
         ChangeNotifierProxyProvider<Auth, OrderList>(
-          create: (_) => OrderList('', []),
+          create: (_) => OrderList(),
           update: (context, auth, previousOrderList) {
             return OrderList(auth.token ?? '', previousOrderList?.items ?? []);
           },
