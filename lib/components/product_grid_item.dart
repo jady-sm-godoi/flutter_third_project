@@ -4,6 +4,8 @@ import 'package:udemy_shop/models/cart.dart';
 import 'package:udemy_shop/models/product.dart';
 import 'package:udemy_shop/utils/app_routes.dart';
 
+import '../models/auth.dart';
+
 class ProductGridItem extends StatelessWidget {
   const ProductGridItem({Key? key}) : super(key: key);
 
@@ -11,6 +13,7 @@ class ProductGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final auth = Provider.of<Auth>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -37,7 +40,7 @@ class ProductGridItem extends StatelessWidget {
             builder: (ctx, product, _) => IconButton(
               onPressed: () async {
                 try {
-                  await product.toggleFavorite();
+                  await product.toggleFavorite(auth.token ?? '');
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: product.isFavorite
                         ? const Text('Produto favoritado!')
