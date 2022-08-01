@@ -12,9 +12,11 @@ import 'package:udemy_shop/utils/constants.dart';
 class OrderList extends ChangeNotifier {
   List<Order> _items = [];
   final String _token;
+  final String _userId;
 
   OrderList([
     this._token = '',
+    this._userId = '',
     this._items = const [],
   ]);
 
@@ -30,7 +32,7 @@ class OrderList extends ChangeNotifier {
     List<Order> items = [];
 
     final response = await http.get(
-      Uri.parse('${Constants.ORDERS_BASE_URL}.json?auth=$_token'),
+      Uri.parse('${Constants.ORDERS_BASE_URL}/$_userId.json?auth=$_token'),
     );
     if (response.body == 'null') {
       return;
@@ -59,7 +61,7 @@ class OrderList extends ChangeNotifier {
   Future<void> addOrder(Cart cart) async {
     final date = DateTime.now();
     final response = await http.post(
-      Uri.parse('${Constants.ORDERS_BASE_URL}.json?auth=$_token'),
+      Uri.parse('${Constants.ORDERS_BASE_URL}/$_userId.json?auth=$_token'),
       body: jsonEncode({
         'total': cart.totalAmount,
         'date': date.toIso8601String(),
