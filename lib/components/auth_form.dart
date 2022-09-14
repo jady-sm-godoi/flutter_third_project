@@ -51,7 +51,7 @@ class _AuthFormState extends State<AuthForm>
       ),
     );
 
-    _heightAnimation?.addListener(() => setState(() {}));
+    // _heightAnimation?.addListener(() => setState(() {}));
   }
 
   @override
@@ -130,82 +130,87 @@ class _AuthFormState extends State<AuthForm>
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Container(
-        // height: _isLogin() ? 310 : 400,
-        height: _heightAnimation?.value.height ?? (_isLogin() ? 310 : 400),
-        width: _deviceSize.width * 0.75,
-        padding: const EdgeInsets.all(16),
+      child: AnimatedBuilder(
+        animation: _heightAnimation!,
+        builder: (context, childForm) => Container(
+          // height: _isLogin() ? 310 : 400,
+          height: _heightAnimation?.value.height ?? (_isLogin() ? 310 : 400),
+          width: _deviceSize.width * 0.75,
+          padding: const EdgeInsets.all(16),
+          child: childForm,
+        ),
         child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'E-mail'),
+                keyboardType: TextInputType.emailAddress,
+                onSaved: (email) => _authData['email'] = email ?? '',
+                validator: (_email) {
+                  final email = _email ?? '';
+                  if (email.trim().isEmpty || !email.contains('@')) {
+                    return 'E-mail inválido';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(labelText: 'Senha'),
+                keyboardType: TextInputType.visiblePassword,
+                obscureText: true,
+                onSaved: (password) => _authData['password'] = password ?? '',
+                validator: (_password) {
+                  final password = _password ?? '';
+                  if (password.isEmpty || password.length < 5) {
+                    return 'Senha deve ter mais de 5 caracteres';
+                  }
+                  return null;
+                },
+              ),
+              if (_isSignup())
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'E-mail'),
-                  keyboardType: TextInputType.emailAddress,
-                  onSaved: (email) => _authData['email'] = email ?? '',
-                  validator: (_email) {
-                    final email = _email ?? '';
-                    if (email.trim().isEmpty || !email.contains('@')) {
-                      return 'E-mail inválido';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(labelText: 'Senha'),
+                  decoration:
+                      const InputDecoration(labelText: 'Confirmar Senha'),
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: true,
-                  onSaved: (password) => _authData['password'] = password ?? '',
-                  validator: (_password) {
-                    final password = _password ?? '';
-                    if (password.isEmpty || password.length < 5) {
-                      return 'Senha deve ter mais de 5 caracteres';
-                    }
-                    return null;
-                  },
+                  validator: _isLogin()
+                      ? null
+                      : (_password) {
+                          final password = _password ?? '';
+                          if (password != _passwordController.text) {
+                            return 'Senhas não conferem ';
+                          }
+                          return null;
+                        },
                 ),
-                if (_isSignup())
-                  TextFormField(
-                    decoration:
-                        const InputDecoration(labelText: 'Confirmar Senha'),
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    validator: _isLogin()
-                        ? null
-                        : (_password) {
-                            final password = _password ?? '';
-                            if (password != _passwordController.text) {
-                              return 'Senhas não conferem ';
-                            }
-                            return null;
-                          },
-                  ),
-                const SizedBox(
-                  height: 20,
-                ),
-                _isLoading
-                    ? const CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: _submit,
-                        child: Text(_isLogin() ? 'ENTRAR' : 'REGISTRAR'),
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 30,
-                            )),
-                      ),
-                const Spacer(),
-                TextButton(
-                  onPressed: _switchAuthMode,
-                  child: Text(
-                      _isLogin() ? 'DESEJA REGISTRAR?' : 'JÁ POSSUI CONTA?'),
-                )
-              ],
-            )),
+              const SizedBox(
+                height: 20,
+              ),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: _submit,
+                      child: Text(_isLogin() ? 'ENTRAR' : 'REGISTRAR'),
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 30,
+                          )),
+                    ),
+              const Spacer(),
+              TextButton(
+                onPressed: _switchAuthMode,
+                child:
+                    Text(_isLogin() ? 'DESEJA REGISTRAR?' : 'JÁ POSSUI CONTA?'),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
